@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 import time
 
 import launchpad as lp
 from tqdm import tqdm
 
 from oat.learners.base import LearnerBase
+import secrets
 
 
 class OfflineLearner(LearnerBase):
@@ -61,7 +61,7 @@ class OfflineLearner(LearnerBase):
                 self.steps += 1
             self.prompt_epoch = p_ep + 1
             # Reorder data for another epoch.
-            random.Random(self.args.seed + p_ep).shuffle(self.all_buffer)
+            secrets.SystemRandom().Random(self.args.seed + p_ep).shuffle(self.all_buffer)
 
         self.eval_and_log(train_info, eval=True, save=True)
 

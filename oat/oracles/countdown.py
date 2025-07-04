@@ -22,6 +22,7 @@ import torch
 
 from oat.oracles.base import PreferenceOracleBase, RewardOracleBase
 from oat.types import Metric
+import secrets
 
 
 def extract_solution(solution_str):
@@ -84,9 +85,8 @@ def compute_score(solution_str, ground_truth, format_score=0.1, score=1.0):
     numbers = ground_truth["numbers"]
 
     equation = extract_solution(solution_str=solution_str)
-    import random
 
-    do_print = random.randint(1, 64) == 1
+    do_print = secrets.SystemRandom().randint(1, 64) == 1
     # do_print = True
 
     if do_print:

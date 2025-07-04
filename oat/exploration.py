@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import abc
-import random
 from dataclasses import dataclass
 from typing import Dict, List
 
@@ -27,6 +26,7 @@ from oat.rm import uncertainty
 from oat.rm.backbone import RMBackbone
 from oat.rm.model import RewardModel
 from oat.types import Metric
+import secrets
 
 
 @dataclass
@@ -295,7 +295,7 @@ class ModelBasedExplorer(Explorer):
         # mean_rewards = rewards.mean(0)
         max_model_data = int(len(is_model_data) * self.max_model_data_ratio)
         is_model_data[:max_model_data] = 1
-        random.shuffle(is_model_data)
+        secrets.SystemRandom().shuffle(is_model_data)
         for i, imd in enumerate(is_model_data):
             if imd:
                 margin_i = random_belief_reward_margin[i]
