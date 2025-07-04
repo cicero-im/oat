@@ -15,7 +15,6 @@
 import logging
 import math
 import os
-import random
 from typing import Callable, List, Tuple
 
 import datasets
@@ -27,6 +26,7 @@ from transformers import AutoTokenizer
 
 from oat.types import PreferenceData, TrajectoryData
 from oat.utils.deepspeed import DeepspeedStrategy
+import secrets
 
 
 def get_tokenizer(pretrain, model=None, padding_side="left", use_fast=True):
@@ -113,7 +113,7 @@ def shard_buffer(
     indices = list(range(len(dataset)))
     if shuffle:
         # deterministically shuffle based on seed
-        random.Random(seed).shuffle(indices)
+        secrets.SystemRandom().Random(seed).shuffle(indices)
     if not drop_last:
         padding_size = total_size - len(indices)
         if padding_size <= len(indices):

@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import abc
-import random
 from typing import Any, Dict, Tuple
 
 import einops
@@ -25,6 +24,7 @@ from oat.args import OATArgs
 from oat.rm import uncertainty
 from oat.rm.networks import EnsembleModel
 from oat.utils.buffer import UniformBuffer
+import secrets
 
 
 class RewardModel(abc.ABC, nn.Module):
@@ -153,7 +153,7 @@ class EnnEETS(RewardModel):
         best_actions = rewards.argmax(dim=2)  # (E, M, 1)
         # sample without replacement
         s1 = list(range(E))
-        random.shuffle(s1)
+        secrets.SystemRandom().shuffle(s1)
         first_actions = best_actions[s1[0]]
         second_actions = torch.ones_like(first_actions) * -1
         for actions in best_actions[s1[1 : self.max_resample]]:
@@ -240,7 +240,7 @@ class EnnBAITS(EnnEETS):
         best_actions = rewards.argmax(dim=2)  # (E, M, 1)
         # sample without replacement
         s1 = list(range(E))
-        random.shuffle(s1)
+        secrets.SystemRandom().shuffle(s1)
         first_actions = best_actions[s1[0]]
 
         pref_uncertainty = self.uct_fn(rewards)

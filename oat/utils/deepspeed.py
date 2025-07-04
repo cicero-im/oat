@@ -16,7 +16,6 @@
 
 import logging
 import os
-import random
 import shutil
 import time
 from abc import ABC
@@ -40,6 +39,7 @@ from torch.utils.data import DataLoader, DistributedSampler
 
 from oat.args import OATArgs
 from oat.model import LLM
+import secrets
 
 ModelOptimPair = Tuple[nn.Module, Optimizer]
 ModelOrModelOptimPair = Union[nn.Module, ModelOptimPair]
@@ -209,7 +209,7 @@ class DeepspeedStrategy(ABC):
         self.time_steps = defaultdict(int)
 
     def set_seed(self, seed: int) -> None:
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)
